@@ -3,7 +3,9 @@
 import React from 'react';
 import { Modal } from '@/components/ui/Modal';
 import { Button } from '@/components/ui/Button';
-import { Printer, CheckCircle2 } from 'lucide-react';
+import { Printer, CheckCircle2, MessageCircle } from 'lucide-react';
+import * as htmlToImage from 'html-to-image';
+import { jsPDF } from 'jspdf';
 
 interface ReceiptModalProps {
   isOpen: boolean;
@@ -32,6 +34,62 @@ export function ReceiptModal({ isOpen, onClose, transaction }: ReceiptModalProps
   if (transaction.creditAmount > 0) chargedParts.push('Credit');
   const chargedLabel = chargedParts.length > 0 ? chargedParts.join(' + ') : 'Cash';
 
+  const handleWhatsAppShare = async () => {
+    const receiptElement = document.getElementById('printable-receipt');
+    if (!receiptElement) return;
+
+    try {
+      // Temporarily hide elements not meant for PDF or adjust styles if needed
+      // but in this case #printable-receipt is already styled nicely.
+      
+      const rect = receiptElement.getBoundingClientRect();
+      const imgData = await htmlToImage.toPng(receiptElement, { backgroundColor: '#ffffff', pixelRatio: 2 });
+
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [rect.width, rect.height]
+      });
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, rect.width, rect.height);
+      const pdfBlob = pdf.output('blob');
+      const file = new File([pdfBlob], `Receipt_${saleId}.pdf`, { type: 'application/pdf' });
+
+      // Try native share API for files (mostly mobile or supported desktop browsers)
+      if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: `Receipt ${saleId}`,
+          text: 'Here is your receipt from Yenilas Limited.',
+        });
+      } else {
+        // Fallback for browsers that don't support sharing files (like some desktop browsers)
+        pdf.save(`Receipt_${saleId}.pdf`);
+        
+        // Open WhatsApp web with a friendly message indicating the PDF was downloaded
+        const text = `*Yenilas Limited*\nReceipt: ${saleId}\n\nI have downloaded your receipt as a PDF. I will send it to you shortly!`;
+        const encodedText = encodeURIComponent(text);
+        const phone = transaction.customerId?.phone;
+        let url = `https://wa.me/?text=${encodedText}`;
+        
+        if (phone) {
+            let cleanPhone = phone.replace(/\D/g, '');
+            if (cleanPhone.startsWith('0')) {
+              cleanPhone = '234' + cleanPhone.substring(1);
+            }
+            url = `https://wa.me/${cleanPhone}?text=${encodedText}`;
+        }
+
+        setTimeout(() => {
+          window.open(url, '_blank');
+        }, 500);
+      }
+    } catch (err) {
+      console.error('Error generating PDF:', err);
+      alert('Failed to generate PDF receipt: ' + (err instanceof Error ? err.message : String(err)));
+    }
+  };
+
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Transaction Complete">
       <div className="flex flex-col items-center mb-5 text-emerald-600">
@@ -46,7 +104,7 @@ export function ReceiptModal({ isOpen, onClose, transaction }: ReceiptModalProps
         
         {/* Header */}
         <div className="text-center mb-4 pb-3 border-b border-dashed border-slate-300">
-          <h3 className="font-black text-base tracking-wide text-slate-900 uppercase">De-Luv Limited</h3>
+          <h3 className="font-black text-base tracking-wide text-slate-900 uppercase">Yenilas Limited</h3>
         </div>
 
         {/* Sale Info */}
@@ -148,25 +206,35 @@ export function ReceiptModal({ isOpen, onClose, transaction }: ReceiptModalProps
             Please confirm items before leaving. No<br />
             refund/exchange after purchase.
           </p>
-          <p className="text-[10px] text-slate-400 mt-2">Powered by De-Luv POS</p>
+          <p className="text-[10px] text-slate-400 mt-2">Powered by Yenilas</p>
         </div>
       </div>
 
-      <div className="flex items-center gap-3 w-full">
+      <div className="flex flex-col gap-2 w-full">
+        <div className="flex items-center gap-3 w-full">
+          <Button 
+            type="button" 
+            onClick={onClose}
+            className="!bg-white !text-slate-700 border border-slate-200 hover:!bg-slate-50 shadow-sm flex-1"
+          >
+            New Sale
+          </Button>
+          <Button 
+            type="button" 
+            onClick={handlePrint}
+            className="flex-1 shadow-lg"
+          >
+            <Printer className="w-4 h-4 mr-2" />
+            Print Receipt
+          </Button>
+        </div>
         <Button 
           type="button" 
-          onClick={onClose}
-          className="!bg-white !text-slate-700 border border-slate-200 hover:!bg-slate-50 shadow-sm flex-1"
+          onClick={handleWhatsAppShare}
+          className="w-full !bg-[#25D366] hover:!bg-[#20bd5a] text-white shadow-lg border-0"
         >
-          New Sale
-        </Button>
-        <Button 
-          type="button" 
-          onClick={handlePrint}
-          className="flex-1 shadow-lg"
-        >
-          <Printer className="w-4 h-4 mr-2" />
-          Print Receipt
+          <MessageCircle className="w-4 h-4 mr-2" />
+          Share to WhatsApp
         </Button>
       </div>
 

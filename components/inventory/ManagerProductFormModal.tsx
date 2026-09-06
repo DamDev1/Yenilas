@@ -133,7 +133,7 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            placeholder="e.g. Apple or Pineapple"
+            placeholder=""
           />
 
         </div>
@@ -144,7 +144,7 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
             value={newBrandName}
             onChange={(e) => setNewBrandName(e.target.value)}
             required
-            placeholder="e.g. Rite Foods"
+            placeholder=""
           />
         )}
 

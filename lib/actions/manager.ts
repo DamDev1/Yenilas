@@ -4,6 +4,8 @@ import connectDB from '../db/mongoose';
 import Transaction from '../models/Transaction';
 import '../models/Branch';
 import '../models/User';
+import '../models/Customer';
+import '../models/Product';
 import mongoose from 'mongoose';
 
 export async function getManagerStats(branchId: string) {

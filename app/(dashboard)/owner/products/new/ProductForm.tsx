@@ -98,11 +98,11 @@ export default function ProductForm({ brands, initialData }: { brands: any[], in
         
         <Input
           id="name"
-          label="Variant Name (e.g. Apple, Cola)"
+          label="Variant Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          placeholder="e.g. Apple"
+          placeholder=""
         />
 
 
