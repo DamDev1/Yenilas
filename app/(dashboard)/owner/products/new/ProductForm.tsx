@@ -17,6 +17,8 @@ export default function ProductForm({ brands, initialData }: { brands: any[], in
   const [costPrice, setCostPrice] = useState(initialData?.costPrice?.toString() || '');
   const [sellingPrice, setSellingPrice] = useState(initialData?.sellingPrice?.toString() || '');
   const [packSize, setPackSize] = useState(initialData?.packSize?.toString() || '1');
+  const [size, setSize] = useState(initialData?.size || '');
+  const [category, setCategory] = useState(initialData?.category || '');
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -53,6 +55,8 @@ export default function ProductForm({ brands, initialData }: { brands: any[], in
         costPrice: Number(costPrice),
         sellingPrice: Number(sellingPrice),
         packSize: Number(packSize),
+        size: size || undefined,
+        category: category || undefined,
       };
 
       if (initialData) {
@@ -106,6 +110,45 @@ export default function ProductForm({ brands, initialData }: { brands: any[], in
         />
 
 
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label className="text-[13px] font-bold text-slate-900 block" htmlFor="size">
+            Size
+          </label>
+          <select
+            id="size"
+            value={size}
+            onChange={(e) => setSize(e.target.value)}
+            className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors text-slate-800"
+          >
+            <option value="">Not Specified</option>
+            <option value="20L">20 Liters</option>
+            <option value="4L">4 Liters</option>
+            <option value="1L">1 Liter</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div className="space-y-2">
+          <label className="text-[13px] font-bold text-slate-900 block" htmlFor="category">
+            Category (Type)
+          </label>
+          <select
+            id="category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition-colors text-slate-800"
+          >
+            <option value="">Not Specified</option>
+            <option value="Emulsion">Emulsion</option>
+            <option value="Satin">Satin</option>
+            <option value="Textcote">Textcote</option>
+            <option value="Gloss">Gloss</option>
+            <option value="Matte">Matte</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
       </div>
 
       {brandSelection === 'new' && (

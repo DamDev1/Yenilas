@@ -33,6 +33,8 @@ export async function createProduct(data: {
   costPrice: number;
   sellingPrice: number;
   packSize: number;
+  size?: string;
+  category?: string;
   initialStock?: number;
   branchId?: string;
 }) {
@@ -58,6 +60,8 @@ export async function createProduct(data: {
     costPrice: data.costPrice,
     sellingPrice: data.sellingPrice,
     packSize: data.packSize,
+    size: data.size,
+    category: data.category,
   });
 
   const branches = await Branch.find({});
@@ -90,6 +94,8 @@ export async function updateProduct(id: string, data: {
   costPrice: number;
   sellingPrice: number;
   packSize: number;
+  size?: string;
+  category?: string;
 }) {
   await connectToDatabase();
 
@@ -111,6 +117,8 @@ export async function updateProduct(id: string, data: {
       costPrice: data.costPrice,
       sellingPrice: data.sellingPrice,
       packSize: data.packSize,
+      size: data.size,
+      category: data.category,
     },
     { new: true }
   );

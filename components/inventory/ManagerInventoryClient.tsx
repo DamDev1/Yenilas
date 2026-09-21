@@ -97,6 +97,12 @@ export default function ManagerInventoryClient({ initialInventory, brands, curre
                   <tr key={item._id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="font-bold text-slate-800">{item.productId.name}</div>
+                      {(item.productId.size || item.productId.category) && (
+                        <div className="text-xs text-slate-500 mt-1 flex gap-1">
+                          {item.productId.size && <span className="bg-slate-100 px-1.5 py-0.5 rounded">{item.productId.size}</span>}
+                          {item.productId.category && <span className="bg-slate-100 px-1.5 py-0.5 rounded">{item.productId.category}</span>}
+                        </div>
+                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-slate-600">

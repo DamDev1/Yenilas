@@ -6,6 +6,8 @@ export interface IProduct extends Document {
   costPrice: number;
   sellingPrice: number;
   packSize: number; // e.g. 12 bottles per pack
+  size?: string; // e.g. 20L, 4L
+  category?: string; // e.g. Emulsion, Satin
   image?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -22,6 +24,8 @@ const ProductSchema: Schema = new Schema(
     costPrice: { type: Number, required: true },
     sellingPrice: { type: Number, required: true },
     packSize: { type: Number, required: true, default: 1 },
+    size: { type: String },
+    category: { type: String },
     image: { type: String },
   },
   { timestamps: true }

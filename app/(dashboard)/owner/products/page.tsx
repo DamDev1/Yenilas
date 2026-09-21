@@ -53,6 +53,12 @@ export default async function ProductsPage() {
                   <tr key={product._id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="font-bold text-slate-800">{product.name}</div>
+                      {(product.size || product.category) && (
+                        <div className="text-xs text-slate-500 mt-1 flex gap-1">
+                          {product.size && <span className="bg-slate-100 px-1.5 py-0.5 rounded">{product.size}</span>}
+                          {product.category && <span className="bg-slate-100 px-1.5 py-0.5 rounded">{product.category}</span>}
+                        </div>
+                      )}
                     </td>
                     <td className="px-6 py-4">
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">

@@ -21,6 +21,8 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
   const [costPrice, setCostPrice] = useState('');
   const [sellingPrice, setSellingPrice] = useState('');
   const [packSize, setPackSize] = useState('');
+  const [size, setSize] = useState('');
+  const [category, setCategory] = useState('');
   const [initialStock, setInitialStock] = useState('0');
   
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,6 +35,8 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
       setCostPrice(product.costPrice?.toString() || '');
       setSellingPrice(product.sellingPrice?.toString() || '');
       setPackSize(product.packSize?.toString() || '');
+      setSize(product.size || '');
+      setCategory(product.category || '');
       setInitialStock('0');
     } else if (isOpen && !product) {
       setName('');
@@ -41,6 +45,8 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
       setCostPrice('');
       setSellingPrice('');
       setPackSize('');
+      setSize('');
+      setCategory('');
       setInitialStock('0');
     }
     setError('');
@@ -80,6 +86,8 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
           costPrice: Number(costPrice),
           sellingPrice: Number(sellingPrice),
           packSize: Number(packSize),
+          size: size || undefined,
+          category: category || undefined,
         });
       } else {
         await createProduct({
@@ -89,6 +97,8 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
           costPrice: Number(costPrice),
           sellingPrice: Number(sellingPrice),
           packSize: Number(packSize),
+          size: size || undefined,
+          category: category || undefined,
           initialStock: Number(initialStock),
           branchId: currentUser.branchId
         });
@@ -136,6 +146,39 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
             placeholder=""
           />
 
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <label className="text-sm font-bold text-slate-700">Size</label>
+            <select 
+              className="w-full bg-slate-50 border mt-2 border-slate-200 text-slate-700 py-2.5 px-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              value={size}
+              onChange={(e) => setSize(e.target.value)}
+            >
+              <option value="">Not Specified</option>
+              <option value="20L">20 Liters</option>
+              <option value="4L">4 Liters</option>
+              <option value="1L">1 Liter</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div className="space-y-1">
+            <label className="text-sm font-bold text-slate-700">Category (Type)</label>
+            <select 
+              className="w-full bg-slate-50 border mt-2 border-slate-200 text-slate-700 py-2.5 px-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="">Not Specified</option>
+              <option value="Emulsion">Emulsion</option>
+              <option value="Satin">Satin</option>
+              <option value="Textcote">Textcote</option>
+              <option value="Gloss">Gloss</option>
+              <option value="Matte">Matte</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
         </div>
 
         {brandId === 'NEW' && (
