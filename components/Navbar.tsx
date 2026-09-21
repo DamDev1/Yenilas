@@ -1,10 +1,23 @@
-import { User, Bell } from 'lucide-react';
+'use client';
+
+import { User, Bell, Menu } from 'lucide-react';
+import { useUIStore } from '@/lib/store';
 
 export function Navbar({ user }: { user: { name?: string | null; role?: string } }) {
+  const toggleMobileSidebar = useUIStore((state) => state.toggleMobileSidebar);
+
   return (
-    <header className="h-24 px-6 md:px-10 flex items-center justify-between sticky top-0 z-40 bg-slate-50/80 backdrop-blur-md">
-      <div className="md:hidden font-extrabold text-xl bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-emerald-500">
-        Yenilas
+    <header className="h-24 px-4 md:px-10 flex items-center justify-between sticky top-0 z-40 bg-slate-50/80 backdrop-blur-md">
+      <div className="flex items-center gap-3 md:hidden">
+        <button 
+          onClick={toggleMobileSidebar}
+          className="p-2 -ml-2 text-slate-600 hover:text-blue-600 transition-colors rounded-xl hover:bg-slate-200/50"
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+        <div className="font-extrabold text-xl bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-emerald-500">
+          Yenilas
+        </div>
       </div>
       
       <div className="hidden md:flex flex-col">

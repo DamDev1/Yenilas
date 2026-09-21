@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Users, Store, Package, ArrowRightLeft, LogOut, UserSquare, Receipt, Truck } from 'lucide-react';
+import { useUIStore } from '@/lib/store';
 
 const ownerNavItems = [
   { href: '/owner', label: 'Dashboard', icon: Home },
@@ -32,15 +33,28 @@ const cashierNavItems = [
 
 export function Sidebar({ userRole }: { userRole: string }) {
   const pathname = usePathname();
+  const { isMobileSidebarOpen, closeMobileSidebar } = useUIStore();
 
   let navItems = cashierNavItems;
   if (userRole === 'owner') navItems = ownerNavItems;
   if (userRole === 'manager') navItems = managerNavItems;
 
   return (
-    <aside className="w-[280px] bg-slate-950 text-slate-100 hidden md:flex flex-col m-4 rounded-3xl shadow-2xl relative overflow-hidden">
-      <div className="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/30 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
+    <>
+      {/* Mobile Backdrop */}
+      {isMobileSidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-40 md:hidden transition-opacity"
+          onClick={closeMobileSidebar}
+        />
+      )}
+
+      <aside className={`
+        fixed inset-y-0 left-0 z-50 w-[280px] bg-slate-950 text-slate-100 flex flex-col m-0 md:m-4 md:rounded-3xl shadow-2xl overflow-hidden transition-transform duration-300 ease-in-out md:relative md:translate-x-0
+        ${isMobileSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}
+      `}>
+        <div className="absolute -top-24 -left-24 w-48 h-48 bg-blue-500/30 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-48 h-48 bg-emerald-500/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="h-24 flex items-center px-8 relative z-10">
         <h1 className="text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-teal-300 to-emerald-400 drop-shadow-sm">
@@ -48,7 +62,7 @@ export function Sidebar({ userRole }: { userRole: string }) {
         </h1>
       </div>
 
-      <nav className="flex-1 py-6 px-4 relative z-10">
+      <nav className="flex-1 py-6 px-4 relative z-10 overflow-y-auto">
         <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-4">
           Menu
         </div>
@@ -64,6 +78,7 @@ export function Sidebar({ userRole }: { userRole: string }) {
               <li key={item.href}>
                 <Link
                   href={item.href}
+                  onClick={closeMobileSidebar}
                   className={`flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group relative overflow-hidden ${isActive
                       ? 'bg-gradient-to-r from-blue-600/20 to-transparent text-white shadow-sm ring-1 ring-blue-500/30'
                       : 'text-slate-400 hover:text-white hover:bg-white/5'
@@ -92,6 +107,7 @@ export function Sidebar({ userRole }: { userRole: string }) {
           </Link>
         </div>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 }
