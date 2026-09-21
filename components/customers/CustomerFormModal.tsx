@@ -11,9 +11,10 @@ interface CustomerFormModalProps {
   onClose: () => void;
   customer?: any; // If provided, we're editing
   branchId?: string;
+  defaultType?: 'retail' | 'distributor';
 }
 
-export function CustomerFormModal({ isOpen, onClose, customer, branchId }: CustomerFormModalProps) {
+export function CustomerFormModal({ isOpen, onClose, customer, branchId, defaultType = 'retail' }: CustomerFormModalProps) {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -39,7 +40,7 @@ export function CustomerFormModal({ isOpen, onClose, customer, branchId }: Custo
       if (customer) {
         await updateCustomer(customer._id, { name, phone });
       } else {
-        await createCustomer({ name, phone, branchId });
+        await createCustomer({ name, phone, branchId, customerType: defaultType });
       }
       onClose();
     } catch (err: any) {

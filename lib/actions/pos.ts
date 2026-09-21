@@ -117,12 +117,21 @@ export async function createSale(data: {
     );
   }
 
-  // 4. Update customer debt only by the credit portion
-  if (creditAmount > 0 && customerId) {
-    await Customer.findByIdAndUpdate(
-      customerId,
-      { $inc: { debtBalance: creditAmount } }
-    );
+  // 4. Update customer stats (debt, total paints, total amount)
+  if (customerId) {
+    const totalPaintsDelivered = items.reduce((sum, item) => sum + item.quantity, 0);
+    const updateData: any = {
+      $inc: { 
+        totalPaintsDelivered,
+        totalAmount,
+      }
+    };
+    
+    if (creditAmount > 0) {
+      updateData.$inc.debtBalance = creditAmount;
+    }
+
+    await Customer.findByIdAndUpdate(customerId, updateData);
   }
 
   revalidatePath('/cashier/checkout');

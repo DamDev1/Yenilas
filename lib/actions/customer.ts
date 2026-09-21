@@ -7,9 +7,10 @@ import DebtPayment from '../models/DebtPayment';
 import Transaction from '../models/Transaction';
 import '../models/User';
 
-export async function getCustomers() {
+export async function getCustomers(type?: 'retail' | 'distributor') {
   await connectDB();
-  const customers = await Customer.find()
+  const query = type ? { customerType: type } : {};
+  const customers = await Customer.find(query)
     .populate('branchId', 'name')
     .sort({ createdAt: -1 })
     .lean();
@@ -19,8 +20,8 @@ export async function getCustomers() {
 export async function getCustomerHistory(customerId: string) {
   await connectDB();
   
-  // Get all sales where the customer took credit
-  const creditSales = await Transaction.find({ customerId, creditAmount: { $gt: 0 } })
+  // Get all sales for the customer
+  const sales = await Transaction.find({ customerId })
     .populate('cashierId', 'name')
     .sort({ createdAt: -1 })
     .lean();
@@ -32,14 +33,14 @@ export async function getCustomerHistory(customerId: string) {
     .lean();
 
   const history = [
-    ...creditSales.map(sale => ({ ...sale, type: 'credit_sale' })),
+    ...sales.map(sale => ({ ...sale, type: 'sale' })),
     ...debtPayments.map(payment => ({ ...payment, type: 'debt_payment' }))
   ].sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   return JSON.parse(JSON.stringify(history));
 }
 
-export async function createCustomer(data: { name: string; phone?: string; branchId?: string }) {
+export async function createCustomer(data: { name: string; phone?: string; branchId?: string; customerType?: 'retail' | 'distributor' }) {
   await connectDB();
 
   if (!data.name) {
@@ -50,13 +51,18 @@ export async function createCustomer(data: { name: string; phone?: string; branc
     name: data.name,
     phone: data.phone,
     branchId: data.branchId,
+    customerType: data.customerType || 'retail',
     debtBalance: 0,
+    totalPaintsDelivered: 0,
+    totalAmount: 0,
   });
 
   await customer.save();
 
   revalidatePath('/owner/customers');
   revalidatePath('/manager/customers');
+  revalidatePath('/owner/distributors');
+  revalidatePath('/manager/distributors');
   revalidatePath('/cashier/checkout'); // Cashier POS needs to know about new customers
   revalidatePath('/cashier/customers');
 

@@ -75,24 +75,27 @@ export function CustomerHistoryModal({ isOpen, onClose, customer }: CustomerHist
                 hour: '2-digit', minute: '2-digit' 
               });
               
-              if (item.type === 'credit_sale') {
+              if (item.type === 'sale') {
                 return (
                   <div key={item._id} className="relative">
-                    <div className="absolute -left-[35px] w-6 h-6 bg-red-100 rounded-full border-4 border-white flex items-center justify-center shadow-sm">
-                      <ShoppingBag className="w-3 h-3 text-red-600" />
+                    <div className={`absolute -left-[35px] w-6 h-6 ${item.creditAmount > 0 ? 'bg-red-100' : 'bg-blue-100'} rounded-full border-4 border-white flex items-center justify-center shadow-sm`}>
+                      <ShoppingBag className={`w-3 h-3 ${item.creditAmount > 0 ? 'text-red-600' : 'text-blue-600'}`} />
                     </div>
                     <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm">
                       <div className="flex justify-between items-start mb-2">
                         <div>
-                          <span className="inline-block px-2 py-0.5 bg-red-50 text-red-700 text-[10px] font-bold uppercase tracking-wider rounded-md mb-1 border border-red-100">
-                            Credit Purchase
+                          <span className={`inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-md mb-1 border ${item.creditAmount > 0 ? 'bg-red-50 text-red-700 border-red-100' : 'bg-blue-50 text-blue-700 border-blue-100'}`}>
+                            {item.creditAmount > 0 ? 'Credit Purchase' : 'Purchase'}
                           </span>
                           <p className="text-xs text-slate-500 font-medium">{date}</p>
                         </div>
-                        <span className="font-bold text-red-600 text-lg">+₦{item.creditAmount.toLocaleString()}</span>
+                        <span className={`font-bold text-lg ${item.creditAmount > 0 ? 'text-red-600' : 'text-blue-600'}`}>
+                          +₦{item.totalAmount.toLocaleString()}
+                        </span>
                       </div>
                       
                       <div className="text-sm text-slate-600 mt-3 pt-3 border-t border-slate-100">
+                        {item.creditAmount > 0 && <p className="text-red-600 font-medium mb-1">Unpaid Balance: ₦{item.creditAmount.toLocaleString()}</p>}
                         <p>Total bill was <strong>₦{item.totalAmount.toLocaleString()}</strong>.</p>
                         <p className="text-xs text-slate-400 mt-1">Processed by {item.cashierId?.name || 'Unknown Staff'}</p>
                       </div>
