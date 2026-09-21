@@ -30,7 +30,6 @@ export async function createProduct(data: {
   name: string;
   brandId?: string;
   newBrandName?: string;
-  costPrice: number;
   sellingPrice: number;
   packSize: number;
   size?: string;
@@ -57,7 +56,6 @@ export async function createProduct(data: {
   const newProduct = await Product.create({
     name: data.name,
     brandId: finalBrandId,
-    costPrice: data.costPrice,
     sellingPrice: data.sellingPrice,
     packSize: data.packSize,
     size: data.size,
@@ -91,7 +89,6 @@ export async function updateProduct(id: string, data: {
   name: string;
   brandId?: string;
   newBrandName?: string;
-  costPrice: number;
   sellingPrice: number;
   packSize: number;
   size?: string;
@@ -114,7 +111,6 @@ export async function updateProduct(id: string, data: {
     {
       name: data.name,
       ...(finalBrandId ? { brandId: finalBrandId } : {}),
-      costPrice: data.costPrice,
       sellingPrice: data.sellingPrice,
       packSize: data.packSize,
       size: data.size,

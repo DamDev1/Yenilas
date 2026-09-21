@@ -14,7 +14,6 @@ export default function ProductForm({ brands, initialData }: { brands: any[], in
   const [name, setName] = useState(initialData?.name || '');
   const [brandSelection, setBrandSelection] = useState<string>(initialData?.brandId || '');
   const [newBrandName, setNewBrandName] = useState('');
-  const [costPrice, setCostPrice] = useState(initialData?.costPrice?.toString() || '');
   const [sellingPrice, setSellingPrice] = useState(initialData?.sellingPrice?.toString() || '');
   const [packSize, setPackSize] = useState(initialData?.packSize?.toString() || '1');
   const [size, setSize] = useState(initialData?.size || '');
@@ -52,7 +51,6 @@ export default function ProductForm({ brands, initialData }: { brands: any[], in
         name: fullName,
         brandId: brandSelection === 'new' ? undefined : brandSelection,
         newBrandName: brandSelection === 'new' ? newBrandName : undefined,
-        costPrice: Number(costPrice),
         sellingPrice: Number(sellingPrice),
         packSize: Number(packSize),
         size: size || undefined,
@@ -164,18 +162,7 @@ export default function ProductForm({ brands, initialData }: { brands: any[], in
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Input
-          id="costPrice"
-          type="number"
-          min="0"
-          step="0.01"
-          label="Cost Price (₦)"
-          value={costPrice}
-          onChange={(e) => setCostPrice(e.target.value)}
-          required
-          placeholder="0.00"
-        />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Input
           id="sellingPrice"
           type="number"

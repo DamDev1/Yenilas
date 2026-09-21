@@ -85,7 +85,7 @@ export async function getBranchStats(branchId: string, filter: string = 'today')
   // Stock value calculation
   const inventory = await Inventory.find({ branchId }).populate('productId').lean();
   const totalStockValue = inventory.reduce((sum, inv: any) => {
-    return sum + ((inv.quantity || 0) * (inv.productId?.costPrice || 0));
+    return sum + ((inv.quantity || 0) * (inv.productId?.sellingPrice || 0));
   }, 0);
 
   // Also get assigned manager

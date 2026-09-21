@@ -18,7 +18,6 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
   const [name, setName] = useState('');
   const [brandId, setBrandId] = useState('');
   const [newBrandName, setNewBrandName] = useState('');
-  const [costPrice, setCostPrice] = useState('');
   const [sellingPrice, setSellingPrice] = useState('');
   const [packSize, setPackSize] = useState('');
   const [size, setSize] = useState('');
@@ -32,7 +31,6 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
     if (isOpen && product) {
       setName(product.name);
       setBrandId(product.brandId?._id || product.brandId || '');
-      setCostPrice(product.costPrice?.toString() || '');
       setSellingPrice(product.sellingPrice?.toString() || '');
       setPackSize(product.packSize?.toString() || '');
       setSize(product.size || '');
@@ -42,7 +40,6 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
       setName('');
       setBrandId('');
       setNewBrandName('');
-      setCostPrice('');
       setSellingPrice('');
       setPackSize('');
       setSize('');
@@ -83,7 +80,6 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
           name: finalProductName,
           brandId: brandId === 'NEW' ? undefined : brandId,
           newBrandName: brandId === 'NEW' ? newBrandName : undefined,
-          costPrice: Number(costPrice),
           sellingPrice: Number(sellingPrice),
           packSize: Number(packSize),
           size: size || undefined,
@@ -94,7 +90,6 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
           name: finalProductName,
           brandId: brandId === 'NEW' ? undefined : brandId,
           newBrandName: brandId === 'NEW' ? newBrandName : undefined,
-          costPrice: Number(costPrice),
           sellingPrice: Number(sellingPrice),
           packSize: Number(packSize),
           size: size || undefined,
@@ -191,15 +186,7 @@ export function ManagerProductFormModal({ isOpen, onClose, brands, currentUser, 
           />
         )}
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Input
-            label="Cost Price (₦)"
-            type="number"
-            value={costPrice}
-            onChange={(e) => setCostPrice(e.target.value)}
-            required
-            min="0"
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Input
             label="Selling Price (₦)"
             type="number"

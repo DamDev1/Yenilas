@@ -29,7 +29,6 @@ export default async function ProductsPage() {
               <tr className="bg-slate-50/50 border-b border-slate-100">
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Product Name</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Brand</th>
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Cost Price</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Selling Price</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Pack Size</th>
                 <th className="px-6 py-4 text-right"></th>
@@ -64,9 +63,6 @@ export default async function ProductsPage() {
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
                         {product.brandId?.name || 'Unknown'}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 font-medium text-slate-600">
-                      ₦{product.costPrice.toLocaleString()}
                     </td>
                     <td className="px-6 py-4 font-bold text-emerald-600">
                       ₦{product.sellingPrice.toLocaleString()}
