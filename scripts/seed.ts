@@ -13,7 +13,6 @@ async function seed() {
     const existingOwner = await User.findOne({ username: ownerUsername });
 
     if (!existingOwner) {
-      // Clean up old email-based owner if it exists (for smooth migration during dev)
       await User.deleteOne({ email: 'owner@deluv.com' }).catch(() => {});
 
       const hashedPassword = await bcrypt.hash('password123', 10);
