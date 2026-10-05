@@ -52,6 +52,7 @@ export default function UsersList({
               <tr className="bg-slate-50/50 border-b border-slate-100">
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">User</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Contact</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Address</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Role</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Assigned Branch</th>
                 <th className="px-6 py-4 text-right"></th>
@@ -60,7 +61,7 @@ export default function UsersList({
             <tbody className="divide-y divide-slate-100">
               {users.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
                     <div className="flex flex-col items-center justify-center">
                       <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mb-3">
                         <Users className="w-8 h-8 text-slate-400" />
@@ -95,6 +96,9 @@ export default function UsersList({
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-600">
                       {user.phone}
+                    </td>
+                    <td className="px-6 py-4 text-sm text-slate-600 max-w-[200px] truncate" title={user.address}>
+                      {user.address || <span className="text-slate-400 italic">None</span>}
                     </td>
                     <td className="px-6 py-4">
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border ${

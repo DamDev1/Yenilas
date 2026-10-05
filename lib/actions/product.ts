@@ -14,6 +14,26 @@ export async function getProducts() {
   return JSON.parse(JSON.stringify(products));
 }
 
+export async function getProductsWithTotalInventory() {
+  await connectToDatabase();
+  const products = await Product.find({}).populate('brandId', 'name').lean();
+  
+  const inventories = await Inventory.find({}).lean();
+  
+  const productsWithStock = products.map((prod: any) => {
+    const totalQuantity = inventories
+      .filter((inv: any) => inv.productId.toString() === prod._id.toString())
+      .reduce((sum: number, inv: any) => sum + inv.quantity, 0);
+    
+    return {
+      ...prod,
+      totalQuantity,
+    };
+  });
+  
+  return JSON.parse(JSON.stringify(productsWithStock));
+}
+
 export async function getProduct(id: string) {
   await connectToDatabase();
   const product = await Product.findById(id).lean();

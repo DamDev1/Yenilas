@@ -4,6 +4,7 @@ export interface IUser extends Document {
   name: string;
   username: string;
   phone: string;
+  address?: string;
   password?: string;
   role: 'owner' | 'manager' | 'cashier';
   branchId?: mongoose.Types.ObjectId;
@@ -17,6 +18,7 @@ const UserSchema: Schema = new Schema(
     name: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     phone: { type: String, required: true },
+    address: { type: String },
     password: { type: String, select: false },
     isActive: { type: Boolean, default: true },
     role: {

@@ -30,6 +30,7 @@ export async function createUser(data: {
   name: string;
   username: string;
   phone: string;
+  address?: string;
   password?: string;
   role: 'manager' | 'cashier';
   branchId: string;
@@ -74,6 +75,7 @@ export async function createUser(data: {
     name: data.name,
     username: data.username,
     phone: data.phone,
+    address: data.address,
     password: hashedPassword,
     role: data.role,
     branchId: data.branchId,
@@ -88,6 +90,7 @@ export async function updateUser(id: string, data: {
   name: string;
   username: string;
   phone: string;
+  address?: string;
   role: 'manager' | 'cashier';
   branchId?: string;
 }) {
@@ -114,6 +117,7 @@ export async function updateUser(id: string, data: {
     name: data.name,
     username: data.username,
     phone: data.phone,
+    address: data.address,
     role: data.role,
   };
   

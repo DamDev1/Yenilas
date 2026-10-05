@@ -19,6 +19,7 @@ export function UserFormModal({ isOpen, onClose, branches, initialData, fixedRol
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
   const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<'manager' | 'cashier'>(fixedRole || 'cashier');
   const [branchId, setBranchId] = useState(fixedBranchId || '');
@@ -31,6 +32,7 @@ export function UserFormModal({ isOpen, onClose, branches, initialData, fixedRol
       setName(initialData?.name || '');
       setUsername(initialData?.username || '');
       setPhone(initialData?.phone || '');
+      setAddress(initialData?.address || '');
       setPassword(''); // Password is only set on creation
       setRole(fixedRole || initialData?.role || 'cashier');
       setBranchId(fixedBranchId || initialData?.branchId?._id || initialData?.branchId || '');
@@ -50,6 +52,7 @@ export function UserFormModal({ isOpen, onClose, branches, initialData, fixedRol
         name,
         username,
         phone,
+        address,
         role,
         branchId,
       };
@@ -115,6 +118,15 @@ export function UserFormModal({ isOpen, onClose, branches, initialData, fixedRol
             placeholder="08012345678"
           />
         </div>
+
+        <Input
+          id="address"
+          type="text"
+          label="Address (Optional)"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+          placeholder="e.g. 123 Main St"
+        />
 
         {!initialData && (
           <Input
